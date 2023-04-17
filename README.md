@@ -1,5 +1,4 @@
-# Running airflow on a Docker container
-Follow this tutorial for more details. 
+# Running airflow on a Docker container 
 We can use docker compose to deploy airflow on docker containers and get the web UI up & running. In order to do that, we need to fetch the docker-compose file using the below command on PowerShell:
 
 ```Invoke-WebRequest -Uri 'https://airflow.apache.org/docs/apache-airflow/2.5.3/docker-compose.yaml' -OutFile 'docker-compose.yaml'```
@@ -71,3 +70,7 @@ Do not include too many activities in one operator; i.e., if we’re cleaning ou
 
 When working with operators like PostgresOperator, it’s best practice to create a sql directory under the dag folder and include all your SQL codes there. We can then refer to those locations in our codes using the PostgresOperator. Read on the best practices when working with PostgresOperator.  
 
+# References 
+[Architecture overview](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/overview.html) 
+Running Airflow on Docker
+Airflow Operator
