@@ -16,7 +16,20 @@ Running the ```docker compose up airflow-init``` command will start the "airflow
 
 
 # Airflow architecture
-Airflow is an open-source platform to programmatically author, schedule and monitor data engineering workflows. Airflow however, is not a data streaming, nor a data processing/transformation framework. So, you won’t be able to schedule your workflow on a micro-batch basis; on the other hand, you won’t be able to transform your data, like Spark, inside your Airflow operators. If you do so, you might end up with memory overflow errors. Instead, Airflow is used to trigger and orchestrate the tools you use to process and transform your data
+Airflow is an open-source platform to programmatically author, schedule and monitor data engineering workflows. Airflow however, is not a data streaming, nor a data processing/transformation framework. So, you won’t be able to schedule your workflow on a micro-batch basis; on the other hand, you won’t be able to transform your data, like Spark, inside your Airflow operators. If you do so, you might end up with memory overflow errors. Instead, Airflow is used to trigger and orchestrate the tools you use to process and transform your data. Here's a high-level architecture: 
+
+**Scheduler –** The scheduler is responsible for triggering the workflows as well as submitting tasks to the executors 
+
+**Executor –** Executors handle running of tasks. In most cases, they push the tasks to the workers to be run. There are two types of executors: local & remote executors. Local executors run the tasks locally inside the scheduler’s process, on the other hand, remote executors run the tasks remotely, i.e., within a kubernetes cluster, usually with a use of a pool of executors.   
+
+**Web Server –** A flask-based user interface that is used to inspect, trigger and debug DAGs and tasks. 
+
+**Folder of DAG files –** A folder of DAGs that are read by the scheduler, the executor and any worker that the scheduler might have. For example, the schedule will monitor the DAG folder to figure out whether a task can be triggered. 
+
+**Metadata Database –** Used by the scheduler, executor and the web server to store state. This is compatible with SQL Alchemy, such as Postgresql, MySQL, SQL Server, Oracle and so on. All components of the Airflow architecture are connected to the metadata database, so it allows communications between all components of Airflow.
+
+**Queue –** In case of remote executors, once the scheduler has identified which tasks to trigger, it’ll submit them to the executors and the executors push them to the Tasks Queue in the right order to be executed. Most executors will use other components to communicate with their workers, such as a task queue, but we can still think of executors and their workers as a single logical component in airflow overall.
+
 
 # What is an operator?
 An operator is a Python class that encapsulates logic to perform a unit of task. Operators are the building blocks of Airflow DAGS, and contain the logic on how the tasks need to be implemented. In Airflow, each task is defined by instantiating an operator. All operators inherit from the BaseOperator class that contains the logic on how an operator should be executed. There are three kinds of operators on a high lever: 
