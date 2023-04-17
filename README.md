@@ -72,5 +72,7 @@ When working with operators like PostgresOperator, it’s best practice to creat
 
 # References 
 [Architecture overview](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/overview.html) 
-Running Airflow on Docker
-Airflow Operator
+
+[Running Airflow on Docker](https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#setting-the-right-airflow-user)
+
+[Airflow Operator](https://docs.astronomer.io/learn/what-is-an-operator?tab=traditional#example-implementation)
