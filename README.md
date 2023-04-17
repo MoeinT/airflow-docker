@@ -21,15 +21,21 @@ Airflow is an open-source platform to programmatically author, schedule and moni
 
 # What is an operator?
 An operator is a Python class that encapsulates logic to perform a unit of task. Operators are the building blocks of Airflow DAGS, and contain the logic on how the tasks need to be implemented. In Airflow, each task is defined by instantiating an operator. All operators inherit from the BaseOperator class that contains the logic on how an operator should be executed. There are three kinds of operators on a high lever: 
+
 ***Execute –*** A kind of operator that executes an action; i.e., a PythonOperator that operates a Python function, or a BashOperator that executes a bash script.
 Transfer operators – They’re in charge of transferring data between point A to point B. 
+
 ***Sensors –*** They allow you to only run a task in case a condition is set to true. This operator is useful in creating an event-driven application. 
 
 Here are a few other examples of Airflow operators: 
+
 ***KubernetesPodOperator –***  Executes a task defined as a Docker image in a Kubernetes Pod.
+
 ***SnowflakeOperator –*** Executes a query against a Snowflake database.
+
 ***HttpSensor –*** This is an example of a sensor operator; it executes an HTTP GET statement and returns false for 404 Not Found, or response check failures. So, every 30 seconds it creates this request and checks if there’s an api available. This task checks whether a web service or a REST API is available within an endpoint before running a task in the DAG. If the result of this operator is true, the next task will be run. 
-***SimpleHttpOperator  –*** The SimpleHttpOperator is an operator in Apache Airflow that allows you to make HTTP requests to a web server. It can be used to retrieve data, send data, or trigger an action on a remote server. Read doc here.
+
+***SimpleHttpOperator –*** The SimpleHttpOperator is an operator in Apache Airflow that allows you to make HTTP requests to a web server. It can be used to retrieve data, send data, or trigger an action on a remote server. Read doc here.
 
 # Airflow Architectures 
 In Apache Airflow, the single-node architecture refers to the setup where all the Airflow components, including the web server, scheduler, metadata database, and workers, are installed and run on a single machine. In this setup, Airflow can only scale vertically by adding more resources to the single machine.
