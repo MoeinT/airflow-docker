@@ -6,6 +6,7 @@ from airflow.decorators import dag, task
 from airflow.sensors.http_sensor import HttpSensor
 from airflow.operators.python import PythonOperator
 from airflow.operators.http_operator import SimpleHttpOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 # Function to process the ingest users
@@ -24,6 +25,10 @@ def _process_user(ti):
         })
     
     processed_user.to_csv("/tmp/processed_user.csv", index=None, header=False)
+
+
+def _store_user():
+    None
 
 
 # Define the user_processing DAG
@@ -59,6 +64,11 @@ with DAG("user_processing", start_date = datetime(2023, 4, 17),
     process_user = PythonOperator(
         task_id='process_user',
         python_callable=_process_user
+    )
+
+    store_user = PythonOperator(
+        task_id = "store_user", 
+        python_callable = _store_user
     )
 
     create_user_table >> is_api_available >> extract_user >> process_user

@@ -75,8 +75,14 @@ The multi-node architecture can also provide benefits such as increased fault to
 
 5: Once all the tasks have been successfully run by the workers, the DagRun object will have the state “Succeeded”, if not, it’ll have the state “Failed”.  If the tasks are not yet run, the DagRun object will have the state “Queued”.  
 
+# What are hooks? 
 
-# Test Airflow 
+Airflow uses hooks to provide a unified interface for connecting to various external systems, including databases, cloud services, and other APIs. By using hooks, you can abstract away the details of connecting to these systems and focus on writing the logic for your tasks. Here's an example of a hook: 
+
+a **PostgresHook** hook is a type of hook that provides a Python interface to interact with a PostgreSQL database. It allows you to connect to a PostgreSQL database, execute SQL queries, and retrieve data from the database.
+
+
+# Test Airflow tasks
 
 Run this command to have access to the container where the scheduler runs: ```docker exec -it <name_of_the_scheduler> /bin/bash```
 
