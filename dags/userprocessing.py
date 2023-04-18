@@ -11,7 +11,9 @@ from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 # Function to process the ingest users
 def _process_user(ti):
-
+    """
+    Function to process the extracted data from HTTP and store it in a CSV file
+    """
     user = ti.xcom_pull(task_ids = "extract_user")
     user = user['results'][0]
 
@@ -28,7 +30,11 @@ def _process_user(ti):
 
 
 def _store_user():
-    None
+    """
+    Function to copy the user data from CSV into a postgresql
+    """
+    hook = PostgresHook(postgres_conn_id='postgres')
+    hook.copy_expert(sql="sql/copyuser.sql", file="/tmp/processed_user.csv")
 
 
 # Define the user_processing DAG
@@ -71,4 +77,4 @@ with DAG("user_processing", start_date = datetime(2023, 4, 17),
         python_callable = _store_user
     )
 
-    create_user_table >> is_api_available >> extract_user >> process_user
+    create_user_table >> is_api_available >> extract_user >> process_user >> store_user

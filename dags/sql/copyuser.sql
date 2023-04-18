@@ -1,0 +1,3 @@
+COPY users
+FROM STDIN
+DELIMITER ',';

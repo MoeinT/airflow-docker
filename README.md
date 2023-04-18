@@ -77,9 +77,7 @@ The multi-node architecture can also provide benefits such as increased fault to
 
 # What are hooks? 
 
-Airflow uses hooks to provide a unified interface for connecting to various external systems, including databases, cloud services, and other APIs. By using hooks, you can abstract away the details of connecting to these systems and focus on writing the logic for your tasks. Here's an example of a hook: 
-
-a **PostgresHook** hook is a type of hook that provides a Python interface to interact with a PostgreSQL database. It allows you to connect to a PostgreSQL database, execute SQL queries, and retrieve data from the database.
+Airflow uses hooks to provide a unified interface for connecting to various external systems, including databases, cloud services, and other APIs. By using hooks, you can abstract away the details of connecting to these systems and focus on writing the logic for your tasks. For example, a **PostgresHook** hook is a type of hook that provides a Python interface to interact with a PostgreSQL database. It allows you to connect to a PostgreSQL database, execute SQL queries, and retrieve data from the database.
 
 
 # Test Airflow tasks
