@@ -8,8 +8,11 @@ When you install Airflow using Docker Compose, the ```airflow-init``` service is
 Running the ```docker compose up airflow-init``` command will start the "airflow-init" service and execute the commands necessary to create the Airflow metadata database. Once the initialization is complete, the "airflow-init" service will stop automatically.
 
 **Docker-compose up –** After initializing the Airflow metadata database, you can start Airflow itself by running the command ```docker compose up```. The ```.docker-compose```. part is part of the Docker Compose command line tool. Tells Docker Compose to start the services defined in the docker-compose.yml file. This command is useful for starting all the services in a multi-container application, which is the case for airflow. 
-**```.docker ps``` -** Use this command to get a list of all running containers on the Docker host. 
-**```docker exec id``` -** Use this command and the id of one of the containers to interact with the airflow command line interface.
+
+**docker ps -** Use this command to get a list of all running containers on the Docker host. 
+
+**docker exec id -** Use this command and the id of one of the containers to interact with the airflow command line interface.
+
 **Interact with the User Interface -** Use the below command to interact with the web user. The below command retrieves the list of available DAGs: ```curl --user "airflow:airflow" "http://localhost:8080/api/v1/dags"```
 
 **Interacting with provides –** Installing Airflow core gives us access to some of the most important operators, such as the Python or Bash operators; however, in cases where we need to interact with other platforms, such as AWS, Databricks or DBT, we will have to install additional operators.  
