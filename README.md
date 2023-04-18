@@ -3,6 +3,10 @@ We can use docker compose to deploy airflow on docker containers and get the web
 
 ```Invoke-WebRequest -Uri 'https://airflow.apache.org/docs/apache-airflow/2.5.3/docker-compose.yaml' -OutFile 'docker-compose.yaml'```
 
+Use the below command for Linux-based operating system: 
+
+```curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.5.3/docker-compose.yaml'```
+
 **How to initialize the airflow metadata database –** The command ```docker compose up airflow-init``` is used to initialize the Airflow metadata database, which is required for Airflow to run properly.
 When you install Airflow using Docker Compose, the ```airflow-init``` service is created to initialize the Airflow database. This service runs a set of commands that create the necessary tables and default user accounts in the database.
 Running the ```docker compose up airflow-init``` command will start the "airflow-init" service and execute the commands necessary to create the Airflow metadata database. Once the initialization is complete, the "airflow-init" service will stop automatically.
