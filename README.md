@@ -1,4 +1,4 @@
-# Running airflow on a Docker container 
+# Installing Airflow using Docker 
 We can use docker compose to deploy airflow on docker containers and get the web UI up & running. In order to do that, we need to fetch the docker-compose file using the below command on PowerShell:
 
 ```Invoke-WebRequest -Uri 'https://airflow.apache.org/docs/apache-airflow/2.5.3/docker-compose.yaml' -OutFile 'docker-compose.yaml'```
@@ -56,7 +56,7 @@ Here are a few other examples of Airflow operators:
 
 ***SimpleHttpOperator –*** The SimpleHttpOperator is an operator in Apache Airflow that allows you to make HTTP requests to a web server. It can be used to retrieve data, send data, or trigger an action on a remote server. Read doc here.
 
-# Airflow Architectures 
+# Single-node and multi-node architectures
 In Apache Airflow, the single-node architecture refers to the setup where all the Airflow components, including the web server, scheduler, metadata database, and workers, are installed and run on a single machine. In this setup, Airflow can only scale vertically by adding more resources to the single machine.
 
 On the other hand, the multi-node architecture refers to a setup where each component of Airflow runs on a separate machine, allowing Airflow to scale horizontally by adding more machines. In this setup, the webserver, scheduler, metadata database, and workers are each deployed to separate nodes or clusters, enabling Airflow to handle larger workflows and higher workloads.
