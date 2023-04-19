@@ -59,7 +59,7 @@ with DAG("user_processing", start_date = datetime(2023, 4, 17),
         task_id = "is_api_available", 
         http_conn_id = "user_api",
         endpoint = "api/"
-        )  
+        )
 
     # Extract users 
     extract_user = SimpleHttpOperator(

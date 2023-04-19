@@ -98,9 +98,17 @@ Do not include too many activities in one operator; i.e., if we’re cleaning ou
 
 When working with operators like PostgresOperator, it’s best practice to create a sql directory under the dag folder and include all your SQL codes there. We can then refer to those locations in our codes using the PostgresOperator. Read on the best practices when working with PostgresOperator.  
 
+When defining a task in a DAG, we need to make sure it produce the same outcome on every re-run; i.e., avoid using **INSERT** statements in a task. 
+
+For communicating between tasks in a DAG, use XCom for small messages; a good way of passing larger data between tasks is to use a remote storage such as S3/HDFS. For example, if we have a task that stores processed data in S3 that task can push the S3 path for the output data in Xcom, and the downstream tasks can pull the path from XCom and use it to read the data.
+
+You should avoid writing the top level code which is not necessary to create Operators and build DAG relations between them. This will have negative impact in performance when the Airflow scheduler parses the top-level code
+
 # References 
 [Architecture overview](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/overview.html) 
 
 [Running Airflow on Docker](https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#setting-the-right-airflow-user)
 
-[Airflow Operator](https://docs.astronomer.io/learn/what-is-an-operator?tab=traditional#example-implementation)
+[Airflow Operators](https://docs.astronomer.io/learn/what-is-an-operator?tab=traditional#example-implementation)
+
+[Airflow Best Practices](https://airflow.apache.org/docs/apache-airflow/2.1.4/best-practices.html)
