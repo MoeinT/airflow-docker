@@ -37,7 +37,14 @@ Airflow is an open-source platform to programmatically author, schedule and moni
 
 **Executor –** Executors handle running of tasks. In most cases, they push the tasks to the workers to be run; so, they're responsible in how and on which system the tasks should be run. There are two types of executors: local & remote executors. Local executors run the tasks locally inside the scheduler’s process, on the other hand, remote executors run the tasks remotely, i.e., within a kubernetes cluster, usually with a use of a pool of executors. Here's different executor types: 
 
-- **Sequential executors -** Default executor when we install Airflow; with this it is not possible to run tasks in parallel. They'll always run in sequence.  
+- [**Sequential executors -**](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/sequential.html) Default executor when we install Airflow; with this it is not possible to run tasks in parallel. They'll always run in sequence.  
+- [**Local executors -**](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/local.html) Local executors allow you to run multiple tasks at the same time, but on a single machine. This is not ideal for scaling up, as it only allows you to scale vertically, and not horizontally. 
+
+- [**Celery executors -**](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/local.html) It allows you to scale up the execution of tasks by providing multiple workers. The celery executor provides an additional component to the architecture, called Queue; it's composed of a backend to store the state of each workder, and a broker to push the tasks in the right order. The queue could be Redis, or RabbitMQ, which will have to be installed. This is the default executor specified in the docker-compose.yaml fime. We can see that an environment variable has been set for the metadata database, one for the backend, and one for the broker. 
+
+- [**Celery executors -**](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/local.html)
+
+
 
 **Web Server –** A flask-based user interface that is used to inspect, trigger and debug DAGs and tasks. 
 
