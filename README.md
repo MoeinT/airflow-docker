@@ -33,24 +33,33 @@ The configuration file contains information such as how and on which systems tas
 # Airflow architecture
 Airflow is an open-source platform to programmatically author, schedule and monitor data engineering workflows. Airflow however, is not a data streaming, nor a data processing/transformation framework. So, you won’t be able to schedule your workflow on a micro-batch basis; on the other hand, you won’t be able to transform your data, like Spark, inside your Airflow operators. If you do so, you might end up with memory overflow errors. Instead, Airflow is used to trigger and orchestrate the tools you use to process and transform your data. Here's a high-level architecture: 
 
-**Scheduler –** The scheduler is responsible for triggering the workflows as well as submitting tasks to the executors 
+### Scheduler 
+The scheduler is responsible for triggering the workflows as well as submitting tasks to the executors 
 
-**Executor –** Executors handle running of tasks. In most cases, they push the tasks to the workers to be run; so, they're responsible in how and on which system the tasks should be run. There are two types of executors: local & remote executors. Local executors run the tasks locally inside the scheduler’s process, on the other hand, remote executors run the tasks remotely, i.e., within a kubernetes cluster, usually with a use of a pool of executors. Here's different executor types: 
+### Executor
+Executors handle running of tasks. In most cases, they push the tasks to the workers to be run; so, they're responsible in how and on which system the tasks should be run. There are two types of executors: local & remote executors. Local executors run the tasks locally inside the scheduler’s process, on the other hand, remote executors run the tasks remotely, i.e., within a kubernetes cluster, usually with a use of a pool of executors. Here's different executor types: 
 
-- [**Sequential executors -**](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/sequential.html) Default executor when we install Airflow; with this it is not possible to run tasks in parallel. They'll always run in sequence.  
-- [**Local executors -**](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/local.html) Local executors allow you to run multiple tasks at the same time, but on a single machine. This is not ideal for scaling up, as it only allows you to scale vertically, and not horizontally. 
+[**Sequential executors -**](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/sequential.html) Default executor when we install Airflow; with this it is not possible to run tasks in parallel. They'll always run in sequence.  
 
-- [**Celery executors -**](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/local.html) It allows you to scale up the execution of tasks by providing multiple workers. The celery executor provides an additional component to the architecture, called Queue; it's composed of a backend to store the state of each workder, and a broker to push the tasks in the right order. The queue could be Redis, or RabbitMQ, which will have to be installed. This is the default executor specified in the docker-compose.yaml fime. We can see that an environment variable has been set for the metadata database, one for the backend, and one for the broker. 
+[**Local executors -**](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/local.html) Local executors allow you to run multiple tasks at the same time, but on a single machine. This is not ideal for scaling up, as it only allows you to scale vertically, and not horizontally. 
 
-When working with Celery, we can also take advantage of [**flower**](https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/security/flower.html), which is a web based tool for monitoring and administrating the clusters. Use the following command to get it up & running: ```docker-compose --profile flower up -d```. Once that's up & running, load the page on [http://localhost:5555/](http://localhost:5555/). When running your DAG, depending on the number of tasks being executed, the flower dashboard allows you to monitor their status. 
+[**Celery executors -**](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/local.html) It allows you to scale up the execution of tasks by providing multiple workers. The celery executor provides an additional component to the architecture, called Queue; it's composed of a backend to store the state of each workder, and a broker to push the tasks in the right order. The queue could be Redis, or RabbitMQ, which will have to be installed. This is the default executor specified in the docker-compose.yaml fime. We can see that an environment variable has been set for the metadata database, one for the backend, and one for the broker. 
 
-**Web Server –** A flask-based user interface that is used to inspect, trigger and debug DAGs and tasks. 
+**Executor dashboard -** When working with Celery, we can also take advantage of [**flower**](https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/security/flower.html), which is a web based tool for monitoring and administrating the clusters. Use the following command to get it up & running: ```docker-compose --profile flower up -d```. Once that's up & running, load the page on [http://localhost:5555/](http://localhost:5555/). When running your DAG, depending on the number of tasks being executed, the flower dashboard allows you to monitor their status. 
 
-**Folder of DAG files –** A folder of DAGs that are read by the scheduler, the executor and any worker that the scheduler might have. For example, the schedule will monitor the DAG folder to figure out whether a task can be triggered. 
+**Creating a queue -** Using the docker-compose.yaml file, it is possible to add or remove workers to be used when executing the tasks. For the workder task in the yaml file, we can use the following command to create a queue: ```celery worker -q <queue_name>```. This allows us to run certain tasks to run only under this worker and add better flexibility in how & on which workder certain tasks should be executed.  
 
-**Metadata Database –** Used by the scheduler, executor and the web server to store state. This is compatible with SQL Alchemy, such as Postgresql, MySQL, SQL Server, Oracle and so on. All components of the Airflow architecture are connected to the metadata database, so it allows communications between all components of Airflow.
+### Web Server
+A flask-based user interface that is used to inspect, trigger and debug DAGs and tasks. 
 
-**Queue –** In case of remote executors, once the scheduler has identified which tasks to trigger, it’ll submit them to the executors and the executors push them to the Tasks Queue in the right order to be executed. Most executors will use other components to communicate with their workers, such as a task queue, but we can still think of executors and their workers as a single logical component in airflow overall.
+### Folder of DAG files
+A folder of DAGs that are read by the scheduler, the executor and any worker that the scheduler might have. For example, the schedule will monitor the DAG folder to figure out whether a task can be triggered. 
+
+### Metadata Database
+Used by the scheduler, executor and the web server to store state. This is compatible with SQL Alchemy, such as Postgresql, MySQL, SQL Server, Oracle and so on. All components of the Airflow architecture are connected to the metadata database, so it allows communications between all components of Airflow.
+
+### Queue
+In case of remote executors, once the scheduler has identified which tasks to trigger, it’ll submit them to the executors and the executors push them to the Tasks Queue in the right order to be executed. Most executors will use other components to communicate with their workers, such as a task queue, but we can still think of executors and their workers as a single logical component in airflow overall.
 
 
 # What is an operator?
