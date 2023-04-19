@@ -35,7 +35,8 @@ Airflow is an open-source platform to programmatically author, schedule and moni
 
 **Scheduler –** The scheduler is responsible for triggering the workflows as well as submitting tasks to the executors 
 
-**Executor –** Executors handle running of tasks. In most cases, they push the tasks to the workers to be run; so, they're responsible in how and on which system the tasks should be run. There are two types of executors: local & remote executors. Local executors run the tasks locally inside the scheduler’s process, on the other hand, remote executors run the tasks remotely, i.e., within a kubernetes cluster, usually with a use of a pool of executors.   
+**Executor –** Executors handle running of tasks. In most cases, they push the tasks to the workers to be run; so, they're responsible in how and on which system the tasks should be run. There are two types of executors: local & remote executors. Local executors run the tasks locally inside the scheduler’s process, on the other hand, remote executors run the tasks remotely, i.e., within a kubernetes cluster, usually with a use of a pool of executors. Here's different executor types: 
+    - **Sequential executors -** Default executor when we install Airflow; with this it is not possible to run tasks in parallel. They'll always run in sequence.  
 
 **Web Server –** A flask-based user interface that is used to inspect, trigger and debug DAGs and tasks. 
 
