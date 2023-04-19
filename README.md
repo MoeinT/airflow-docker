@@ -21,13 +21,21 @@ Running the ```docker compose up airflow-init``` command will start the "airflow
 
 **Interacting with provides –** Installing Airflow core gives us access to some of the most important operators, such as the Python or Bash operators; however, in cases where we need to interact with other platforms, such as AWS, Databricks or DBT, we will have to install additional operators.  
 
+**Airflow configurations -** Running the bellow command copies the configuration file of airflow from the scheduler container into the host machine. Once we have this file, we can modify the configuration settings in Airflow. 
+
+```docker cp materials_airflow-scheduler_1:/opt/airflow/airflow.cfg .```
+
+The configuration file contains information such as how and on which systems tasks should be executed, or the level of parallelism.
+
+**NOTE -** The environment variables in the docker-compose.yaml file overwrite the parameters in the configuration file; so, in order to change certain configurations, like the type of executor, we'll have to modify the docker compose file.
+
 
 # Airflow architecture
 Airflow is an open-source platform to programmatically author, schedule and monitor data engineering workflows. Airflow however, is not a data streaming, nor a data processing/transformation framework. So, you won’t be able to schedule your workflow on a micro-batch basis; on the other hand, you won’t be able to transform your data, like Spark, inside your Airflow operators. If you do so, you might end up with memory overflow errors. Instead, Airflow is used to trigger and orchestrate the tools you use to process and transform your data. Here's a high-level architecture: 
 
 **Scheduler –** The scheduler is responsible for triggering the workflows as well as submitting tasks to the executors 
 
-**Executor –** Executors handle running of tasks. In most cases, they push the tasks to the workers to be run. There are two types of executors: local & remote executors. Local executors run the tasks locally inside the scheduler’s process, on the other hand, remote executors run the tasks remotely, i.e., within a kubernetes cluster, usually with a use of a pool of executors.   
+**Executor –** Executors handle running of tasks. In most cases, they push the tasks to the workers to be run; so, they're responsible in how and on which system the tasks should be run. There are two types of executors: local & remote executors. Local executors run the tasks locally inside the scheduler’s process, on the other hand, remote executors run the tasks remotely, i.e., within a kubernetes cluster, usually with a use of a pool of executors.   
 
 **Web Server –** A flask-based user interface that is used to inspect, trigger and debug DAGs and tasks. 
 
