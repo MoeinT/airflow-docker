@@ -1,7 +1,8 @@
 import json
-from pandas import json_normalize
 from airflow import DAG
 from datetime import datetime
+from pandas import json_normalize
+
 from airflow.decorators import dag, task
 from airflow.sensors.http_sensor import HttpSensor
 from airflow.operators.python import PythonOperator
@@ -10,7 +11,7 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 # Function to process the ingest users
-def _process_user(ti):
+def _process_user(ti) -> None:
     """
     Function to process the extracted data from HTTP and store it in a CSV file
     """
@@ -18,12 +19,14 @@ def _process_user(ti):
     user = user['results'][0]
 
     processed_user = json_normalize({
-        'firstname': user['name']['fist'], 
-        'lastname': user['name']['fist'],
+        'firstname': user['name']['first'], 
+        'lastname': user['name']['first'],
         'country': user['location']['country'],
         'username': user['login']['username'],
         'password': user['login']['password'],
-        'email': user["email"]
+        'email': user["email"], 
+        'age': user["registered"]['age'],
+        "registrationdate": user["registered"]["date"]
         })
     
     processed_user.to_csv("/tmp/processed_user.csv", index=None, header=False)
@@ -31,10 +34,13 @@ def _process_user(ti):
 
 def _store_user():
     """
-    Function to copy the user data from CSV into a postgresql
+    Function to copy the user data from CSV into postgresql
     """
     hook = PostgresHook(postgres_conn_id='postgres')
-    hook.copy_expert(sql="sql/copyuser.sql", file="/tmp/processed_user.csv")
+    hook.copy_expert(sql="""
+      COPY users FROM STDIN WITH CSV DELIMITER ','
+        """, 
+    filename="/tmp/processed_user.csv")
 
 
 # Define the user_processing DAG

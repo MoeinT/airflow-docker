@@ -86,7 +86,11 @@ Run this command to have access to the container where the scheduler runs: ```do
 
 Inside that container environment, we will have access to the Airflow CLI; i.e., we can use the ```airflow version``` command to get the version of the airflow currently running in a docker container. 
 
-Run the following command to test a specific task: ```airflow tasks test <DAG_name> <Task_name> <Date_in_the_past>```
+Run the following command to test a specific task: ```airflow tasks test <dag_name> <task_name> <Date_in_the_past>``` 
+
+Another scenario would be when we'd like to debug certain tasks; we might have to access the docker container on which that task is running. For example, if there's a task that gathers certain data and another task that stores it in a CSV file, we can access that file by accessing the docker container in which the worker node is running. Use the following command to do that ```docker exec -it <name_of_the_workder_node> /bash/bin```.
+
+Furthermore, if we have defined a postgres db and would like to access and run sql commands on it, we can access it using the above method. Once inside the database container, run psql -Uairflow and start running sql commands. 
 
 # Best Practices 
 
