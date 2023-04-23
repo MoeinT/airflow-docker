@@ -116,6 +116,10 @@ Another scenario would be when we'd like to debug certain tasks; we might have t
 
 Furthermore, if we have defined a postgres db and would like to access and run sql commands on it, we can access it using the above method. Once inside the database container, run psql -Uairflow and start running sql commands. 
 
+# Airflow task groups
+
+It is possible to use TaskGroups in Airflow to organize tasks in a DAG. If there are multiple tasks that follow the same logic, it is possible to devide them into a child DAG and declare it inside the parent DAG. It helps to logically sepearete certain tasks to avoid ending up with a large DAG containing a high number of tasks. See more details [here](https://docs.astronomer.io/learn/task-groups). 
+
 # Best Practices 
 
 Do not include too many activities in one operator; i.e., if we’re cleaning our data first, and processing it next, we should not be putting both of them into one task, otherwise if there’s an error in the second task, the first one will have to run as well, which is not efficient. Make sure your tasks are well separated. 
@@ -124,7 +128,7 @@ When working with operators like PostgresOperator, it’s best practice to creat
 
 When defining a task in a DAG, we need to make sure it produce the same outcome on every re-run; i.e., avoid using **INSERT** statements in a task. 
 
-For communicating between tasks in a DAG, use XCom for small messages; a good way of passing larger data between tasks is to use a remote storage such as S3/HDFS. For example, if we have a task that stores processed data in S3 that task can push the S3 path for the output data in Xcom, and the downstream tasks can pull the path from XCom and use it to read the data.
+For communicating between tasks in a DAG, use XCom for small messages; XCom contains the required information that needs to be shared between tasks and is stored in the Airflow meta database; for parsing larger data between tasks, however, a good way is to use a remote storage such as S3/HDFS. For example, if we have a task that stores processed data in S3 that task can push the S3 path for the output data in Xcom, and the downstream tasks can pull the path from XCom and use it to read the data.
 
 You should avoid writing the top level code which is not necessary to create Operators and build DAG relations between them. This will have negative impact in performance when the Airflow scheduler parses the top-level code
 
