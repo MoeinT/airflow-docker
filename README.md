@@ -134,7 +134,7 @@ In Airflow, the BranchPythonOperator is used to create a conditional workflow, w
 
 # Trigger rules
 
-The default workflow behaviour is to trigger tasks only if all the upstream tasks have completed successfully. All operators have a ```trigger_rule``` argument that determines the rule for which the task should be triggered. The default value for that argument is ```.all_success```. There are 9 other trigger rules. See the documentation [here](https://airflow.apache.org/docs/apache-airflow/1.10.3/concepts.html?highlight=trigger%20rule). 
+The default workflow behaviour is to trigger tasks only if all the upstream tasks have completed successfully. All operators have a ```trigger_rule``` argument that determines the rule for which the task should be triggered. The default value for that argument is ```all_success```. There are 9 other trigger rules. See the documentation [here](https://airflow.apache.org/docs/apache-airflow/1.10.3/concepts.html?highlight=trigger%20rule). 
 
 # Best Practices 
 
