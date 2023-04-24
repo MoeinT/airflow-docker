@@ -120,11 +120,13 @@ Furthermore, if we have defined a postgres db and would like to access and run s
 
 It is possible to use TaskGroups in Airflow to organize tasks in a DAG. If there are multiple tasks that follow the same logic, it is possible to devide them into a child DAG and declare it inside the parent DAG. It helps to logically sepearete certain tasks to avoid ending up with a large DAG containing a high number of tasks. See more details [here](https://docs.astronomer.io/learn/task-groups). 
 
-# Communicating between tasks 
+# Communications between tasks 
 
 We can use [Xcom](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/xcoms.html) to communicate between tasks in Airflow. Xcom is a mechanism to let tasks talk to each other; many operators auto-push their results into an Xcom key callled *return_value*, i.e., the PythonOperator. 
 
-In order to push a result with a specific key name, we need to use the Xcom_push method; for this, we need to pass the ti (task instance) into the function. Use this syntax to push data with a given key & value to Xcom: ```ti.xcom_push(key = "key", value = "value")```
+**Pushing data to Xcom -** In order to push a result with a specific key name, we need to use the Xcom_push method; for this, we need to pass the ti (task instance) into the function. Use this syntax to push data with a given key & value to Xcom: ```ti.xcom_push(key = "key", value = "value")```. 
+
+**Pulling data from Xcom -** Use the following code to pull data from Xcom: ```ti.xcom_pull(key = 'MyValueToShare', task_ids = 'task_1')```. Notice that you have to provide the id of the task that's pushing the data to Xcom. Also, make sure the ```provide_context``` argument is set to true for the tasks that pulling data from Xcom.
 
 # Best Practices 
 
