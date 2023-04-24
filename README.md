@@ -128,6 +128,10 @@ We can use [Xcom](https://airflow.apache.org/docs/apache-airflow/stable/core-con
 
 **Pulling data from Xcom -** Use the following code to pull data from Xcom: ```ti.xcom_pull(key = 'MyValueToShare', task_ids = 'task_1')```. Notice that you have to provide the id of the task that's pushing the data to Xcom. Also, make sure the ```provide_context``` argument is set to true for the tasks that pulling data from Xcom.
 
+# Conditional executions 
+
+In Airflow, the BranchPythonOperator is used to create a conditional workflow, where the decision to execute a specific task or a set of tasks is based on the result of a Python function. In this method, we need to define a function that returns the task ID of the next task to be executed based on the condition. The tasks that are returned in the function should be defined within the DAG. Make sure to import the BranchPythonOperator package using ```from airflow.operators.python_operator import BranchPythonOperator```.
+
 # Best Practices 
 
 Do not include too many activities in one operator; i.e., if we’re cleaning our data first, and processing it next, we should not be putting both of them into one task, otherwise if there’s an error in the second task, the first one will have to run as well, which is not efficient. Make sure your tasks are well separated. 
