@@ -136,6 +136,20 @@ In Airflow, the BranchPythonOperator is used to create a conditional workflow, w
 
 The default workflow behaviour is to trigger tasks only if all the upstream tasks have completed successfully. All operators have a ```trigger_rule``` argument that determines the rule for which the task should be triggered. The default value for that argument is ```all_success```. There are 9 other trigger rules. See the documentation [here](https://airflow.apache.org/docs/apache-airflow/1.10.3/concepts.html?highlight=trigger%20rule). 
 
+# Running ElasticSearch within the Airflow environment 
+
+It is an open-source, full-text search and analytics engine that allows you to store, search, and analyze large volumes of data quickly and in real-time. Elasticsearch can be useful in Airflow for various purposes: 
+
+**Logging -** Airflow generates a lot of logs, and Elasticsearch can be used to store and analyze these logs. By sending Airflow logs to Elasticsearch, you can centralize your log data and make it easier to search and analyze. This can help you identify issues and troubleshoot problems more quickly.
+
+**Monitoring -** Elasticsearch can be used to monitor the health and performance of your Airflow infrastructure. By collecting and analyzing metrics, events, and logs, you can identify performance bottlenecks, detect anomalies, and proactively address issues before they become critical.
+
+**Search -** Airflow provides a web interface for managing workflows and tasks. Elasticsearch can be used to power the search functionality in the web interface, making it easier to find the workflows and tasks you need.
+
+**Analytics -**: Elasticsearch can be used to analyze Airflow metadata, such as task durations, task dependencies, and workflow execution times. By analyzing this data, you can identify patterns, optimize your workflows, and improve your overall Airflow performance.
+
+Add the elastic search service in the docker compose yaml file and run the following command to install the elasticSearch container: ```docker-compose -f .\docker-compose-es.yaml up -d```
+
 # Best Practices 
 
 Do not include too many activities in one operator; i.e., if we’re cleaning our data first, and processing it next, we should not be putting both of them into one task, otherwise if there’s an error in the second task, the first one will have to run as well, which is not efficient. Make sure your tasks are well separated. 
