@@ -120,6 +120,12 @@ Furthermore, if we have defined a postgres db and would like to access and run s
 
 It is possible to use TaskGroups in Airflow to organize tasks in a DAG. If there are multiple tasks that follow the same logic, it is possible to devide them into a child DAG and declare it inside the parent DAG. It helps to logically sepearete certain tasks to avoid ending up with a large DAG containing a high number of tasks. See more details [here](https://docs.astronomer.io/learn/task-groups). 
 
+# Communicating between tasks 
+
+We can use [Xcom](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/xcoms.html) to communicate between tasks in Airflow. Xcom is a mechanism to let tasks talk to each other; many operators auto-push their results into an Xcom key callled *return_value*, i.e., the PythonOperator. 
+
+In order to push a result with a specific key name, we need to use the Xcom_push method; for this, we need to pass the ti (task instance) into the function. Use this syntax to push data with a given key & value to Xcom: ```ti.xcom_push(key = "key", value = "value")```
+
 # Best Practices 
 
 Do not include too many activities in one operator; i.e., if we’re cleaning our data first, and processing it next, we should not be putting both of them into one task, otherwise if there’s an error in the second task, the first one will have to run as well, which is not efficient. Make sure your tasks are well separated. 
