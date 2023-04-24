@@ -1,6 +1,5 @@
 from airflow import DAG
-from airflow.operators.python_operator import BranchPythonOperator
-from airflow.operators.python import PythonOperator
+from airflow.operators.python import PythonOperator, BranchPythonOperator
 from airflow.operators.bash import BashOperator
 from airflow.models import XCom
 from datetime import datetime
@@ -40,4 +39,10 @@ with DAG("xcom_dag", start_date = datetime(2023, 4, 24),
         bash_command='sleep 5'
     )
 
-    task_1 >> branch_task >> [task_a, task_b]
+    task_c = BashOperator(
+        task_id='task_c',
+        bash_command='sleep 5', 
+        trigger_rule = "none_failed"
+    )
+
+    task_1 >> branch_task >> [task_a, task_b] >> task_c
