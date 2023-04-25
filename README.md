@@ -136,6 +136,14 @@ In Airflow, the BranchPythonOperator is used to create a conditional workflow, w
 
 The default workflow behaviour is to trigger tasks only if all the upstream tasks have completed successfully. All operators have a ```trigger_rule``` argument that determines the rule for which the task should be triggered. The default value for that argument is ```all_success```. There are 9 other trigger rules. See the documentation [here](https://airflow.apache.org/docs/apache-airflow/1.10.3/concepts.html?highlight=trigger%20rule). 
 
+# Airflow Plugins
+
+Plugins in Airflow are extensions that allow you to add new functionalities or customize certain features of Airflow to suit your specific needs. Airflow has a modular architecture that allows you to create plugins to add new operators, sensors, hooks, or even entire subsystems.
+
+For example, if you need to interact with a specific API, you can create a custom operator that encapsulates the logic to interact with that API, and then add it to Airflow using a plugin. Or, if you need to customize the behavior of the scheduler, you can create a plugin that overrides the default scheduler implementation.
+
+To create a plugin, you need to define a Python module that contains the code for your plugin. The module should be placed in the plugins directory of your Airflow installation. You can then register your plugin with Airflow by creating an instance of the ```AirflowPlugin``` class and defining the hooks, operators, sensors, or other components that your plugin provides.
+
 # Running ElasticSearch within the Airflow environment 
 
 It is an open-source, full-text search and analytics engine that allows you to store, search, and analyze large volumes of data quickly and in real-time. Elasticsearch can be useful in Airflow for various purposes: 
@@ -150,13 +158,20 @@ It is an open-source, full-text search and analytics engine that allows you to s
 
 Add the elastic search service in the docker compose yaml file and run the following command to install the elasticSearch container: ```docker-compose -f .\docker-compose-es.yaml up -d```
 
-# Airflow Plugins
+# Creating a Plugin for ElasticSearch
 
-Plugins in Airflow are extensions that allow you to add new functionalities or customize certain features of Airflow to suit your specific needs. Airflow has a modular architecture that allows you to create plugins to add new operators, sensors, hooks, or even entire subsystems.
+The goal is to be able to interact with ElasticSearch, which is an external tool to Airflow. Here are the steps: 
+- Create a connection of type ```elastic``` on the Airflow UI (connection type: HTTP, host: elastic, port: 9200)
+- In order to be able to interact with ElasticSearch, we need to create a hook, a service that allows us to encapsulate the logic required to interact with an external service.
+- Under create a hook/elastic subfolder under the plugin folder. Create a new .py file under which you can define a custom hook for ElasticSearch. 
 
-For example, if you need to interact with a specific API, you can create a custom operator that encapsulates the logic to interact with that API, and then add it to Airflow using a plugin. Or, if you need to customize the behavior of the scheduler, you can create a plugin that overrides the default scheduler implementation.
+**Notes**
 
-To create a plugin, you need to define a Python module that contains the code for your plugin. The module should be placed in the plugins directory of your Airflow installation. You can then register your plugin with Airflow by creating an instance of the ```AirflowPlugin``` class and defining the hooks, operators, sensors, or other components that your plugin provides.
+- When we create a connection in the Airflow UI, a connection table gets created within the Airflow metadata database. This table has certain columns that we can access by calling the ```self.get_connection(conn_id)``` method of the ```BaseHook``` class in Python. We can then access values of those columns by using the dot notation, i.e., ```host = conn.host```. 
+- In order to implement step 3, we need to define a class that inherits from the ```BaseHook``` class. See more details [here]() under the plugins folder.  
+- The index method of the elasticsearch.Elasticsearch object sends a request to Elasticsearch to index the provided document in the specified index. The request is executed over the HTTP protocol and the Elasticsearch server processes it to store the document in its index.
+
+
 
 # Best Practices
 
