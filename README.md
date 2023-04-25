@@ -150,7 +150,15 @@ It is an open-source, full-text search and analytics engine that allows you to s
 
 Add the elastic search service in the docker compose yaml file and run the following command to install the elasticSearch container: ```docker-compose -f .\docker-compose-es.yaml up -d```
 
-# Best Practices 
+# Airflow Plugins
+
+Plugins in Airflow are extensions that allow you to add new functionalities or customize certain features of Airflow to suit your specific needs. Airflow has a modular architecture that allows you to create plugins to add new operators, sensors, hooks, or even entire subsystems.
+
+For example, if you need to interact with a specific API, you can create a custom operator that encapsulates the logic to interact with that API, and then add it to Airflow using a plugin. Or, if you need to customize the behavior of the scheduler, you can create a plugin that overrides the default scheduler implementation.
+
+To create a plugin, you need to define a Python module that contains the code for your plugin. The module should be placed in the plugins directory of your Airflow installation. You can then register your plugin with Airflow by creating an instance of the ```AirflowPlugin``` class and defining the hooks, operators, sensors, or other components that your plugin provides.
+
+# Best Practices
 
 Do not include too many activities in one operator; i.e., if we’re cleaning our data first, and processing it next, we should not be putting both of them into one task, otherwise if there’s an error in the second task, the first one will have to run as well, which is not efficient. Make sure your tasks are well separated. 
 
