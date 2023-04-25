@@ -33,3 +33,9 @@ class ElasticHook(BaseHook):
     def add_doc(self, index, doc_type, doc): 
         result = self.es.index(index=index, doc_type=doc_type, doc=doc)
         return result
+
+
+# Add ElasticHook to the plugin system manager
+class AirflowElasticPlugin(AirflowPlugin):
+    name = "elastic"
+    hooks = [ElasticHook]

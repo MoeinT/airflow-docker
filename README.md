@@ -160,18 +160,17 @@ Add the elastic search service in the docker compose yaml file and run the follo
 
 # Creating a Plugin for ElasticSearch
 
-The goal is to be able to interact with ElasticSearch, which is an external tool to Airflow. Here are the steps: 
+The goal is to be able to interact with ElasticSearch, which is an external tool to Airflow. For this we need to create a custom hook; here are the steps: 
 - Create a connection of type ```elastic``` on the Airflow UI (connection type: HTTP, host: elastic, port: 9200)
 - In order to be able to interact with ElasticSearch, we need to create a hook, a service that allows us to encapsulate the logic required to interact with an external service.
-- Under create a hook/elastic subfolder under the plugin folder. Create a new .py file under which you can define a custom hook for ElasticSearch. 
+- Create a hook/elastic subfolder under the plugin folder. Create a new .py file under which you can define a custom hook for ElasticSearch. 
+- Once the ElasticSearch class has been created, you need to register it by defining another class that inherits from ```AirflowPlugin```. You then add the following line of code to add the CustomHook to the plugin system manager: ```hooks = [<name_of_your_hook>]```.
 
-**Notes**
+**BaseHook -** In order to implement step 1, we need to define a class that inherits from the ```BaseHook``` class. See more details in the code under the plugins folder.  
 
-- When we create a connection in the Airflow UI, a connection table gets created within the Airflow metadata database. This table has certain columns that we can access by calling the ```self.get_connection(conn_id)``` method of the ```BaseHook``` class in Python. We can then access values of those columns by using the dot notation, i.e., ```host = conn.host```. 
-- In order to implement step 3, we need to define a class that inherits from the ```BaseHook``` class. See more details [here]() under the plugins folder.  
-- The index method of the elasticsearch.Elasticsearch object sends a request to Elasticsearch to index the provided document in the specified index. The request is executed over the HTTP protocol and the Elasticsearch server processes it to store the document in its index.
+**Connection -** When we create a connection in the Airflow UI, a row gets created within the connection table of Airflow's metadata database. This table has certain columns that we can access by calling the ```self.get_connection(conn_id)``` method of the ```BaseHook``` class in Python. We can then access values of those columns by using the dot notation, i.e., ```hosts = conn.host```. 
 
-
+**Index -** The ```index``` method of the ```elasticsearch.Elasticsearch``` object sends a request to Elasticsearch to index the provided document in the specified index. The request is executed over the HTTP protocol and the Elasticsearch server processes it to store the document in its index.
 
 # Best Practices
 
