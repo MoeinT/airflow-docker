@@ -5,21 +5,21 @@ from elasticsearch import Elasticsearch
 class ElasticHook(BaseHook):
     def __init__(self, conn_id='elastic_default', *args, **kwargs):
         super().__init__(*args, **kwargs)
-        conn = self.get_connection(conn_id)
+        self.conn = self.get_connection(conn_id)
 
-        conn_config = {}
+        self.conn_config = {}
 
-        if conn.host:
-            hosts = conn.host.split(",")
+        if self.conn.host:
+            hosts = self.conn.host.split(",")
         
-        if conn.port:
-            conn_config["port"] = int(conn.port)
+        if self.conn.port:
+            self.conn_config["port"] = int(self.conn.port)
         
-        if conn.login: 
-            conn_config["http_auth"] = (conn.login, conn.password)
+        if self.conn.login: 
+            self.conn_config["http_auth"] = (self.conn.login, self.conn.password)
 
-        es = Elasticsearch(hosts, **conn_config)
-        self.index = conn.schema
+        self.es = Elasticsearch(hosts, **self.conn_config)
+        self.index = self.conn.schema
 
 # Return information about the ElasticSearch object
     def info(self):
