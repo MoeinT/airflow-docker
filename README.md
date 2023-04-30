@@ -53,7 +53,7 @@ Executors handle running of tasks. In most cases, they push the tasks to the wor
 A flask-based user interface that is used to inspect, trigger and debug DAGs and tasks. 
 
 ### Folder of DAG files
-A folder of DAGs that are read by the scheduler, the executor and any worker that the scheduler might have. For example, the schedule will monitor the DAG folder to figure out whether a task can be triggered. 
+The folder of DAGs is read by the scheduler, the executor and any worker that it might have.
 
 ### Metadata Database
 Used by the scheduler, executor and the web server to store state. This is compatible with SQL Alchemy, such as Postgresql, MySQL, SQL Server, Oracle and so on. All components of the Airflow architecture are connected to the metadata database, so it allows communications between all components of Airflow.
@@ -65,8 +65,9 @@ In case of remote executors, once the scheduler has identified which tasks to tr
 # What is an operator?
 An operator is a Python class that encapsulates logic to perform a unit of task. Operators are the building blocks of Airflow DAGS, and contain the logic on how the tasks need to be implemented. In Airflow, each task is defined by instantiating an operator. All operators inherit from the BaseOperator class that contains the logic on how an operator should be executed. There are three kinds of operators on a high lever: 
 
-***Execute –*** A kind of operator that executes an action; i.e., a PythonOperator that operates a Python function, or a BashOperator that executes a bash script.
-Transfer operators – They’re in charge of transferring data between point A to point B. 
+***Execute –** A kind of operator that executes an action; i.e., a PythonOperator that operates a Python function, or a BashOperator that executes a bash script.
+
+**Transfer operators –** They’re in charge of transferring data between point A to point B. 
 
 ***Sensors –*** They allow you to only run a task in case a condition is set to true. This operator is useful in creating an event-driven application. 
 
