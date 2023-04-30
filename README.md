@@ -65,7 +65,7 @@ In case of remote executors, once the scheduler has identified which tasks to tr
 # What is an operator?
 An operator is a Python class that encapsulates logic to perform a unit of task. Operators are the building blocks of Airflow DAGS, and contain the logic on how the tasks need to be implemented. In Airflow, each task is defined by instantiating an operator. All operators inherit from the BaseOperator class that contains the logic on how an operator should be executed. There are three kinds of operators on a high lever: 
 
-***Execute –** A kind of operator that executes an action; i.e., a PythonOperator that operates a Python function, or a BashOperator that executes a bash script.
+**Execute –** A kind of operator that executes an action; i.e., a PythonOperator that operates a Python function, or a BashOperator that executes a bash script.
 
 **Transfer operators –** They’re in charge of transferring data between point A to point B. 
 
