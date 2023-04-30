@@ -1,11 +1,12 @@
 from airflow import DAG
+from airflow.decorators import task
 from airflow.operators.python import PythonOperator
 from hooks.elastic.elastic_hook import ElasticHook
 from datetime import datetime
  
-def _print_es_info():
-    hook = ElasticHook()
-    print(hook.info())
+# def _print_es_info():
+#     hook = ElasticHook()
+#     print(hook.info())
  
 with DAG(
     'elastic_dag', 
@@ -13,8 +14,14 @@ with DAG(
     schedule_interval='@daily', 
     catchup=False
     ) as dag:
- 
-    print_es_info = PythonOperator(
-        task_id='print_es_info',
-        python_callable=_print_es_info
-    )
+    
+    @task()
+    def _print_es_info():
+        hook = ElasticHook()
+        print(hook.info())
+
+    _print_es_info()
+    # print_es_info = PythonOperator(
+    #     task_id='print_es_info',
+    #     python_callable=_print_es_info
+    # )
